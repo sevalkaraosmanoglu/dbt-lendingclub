@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: loan_applications
+    description: >
+      Accepted and rejected loan applications combined into a single analytics table.
+
+    columns:
+      - name: loan_amount
+        tests:
+          - not_null
+
+      - name: application_status
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['accepted', 'rejected']
+
+      - name: interest_rate
+        tests:
+          - not_null:
+              where: "application_status = 'accepted'"
+
+      - name: loan_term
+        tests:
+          - not_null:
+              where: "application_status = 'accepted'"
+
+      - name: employment_length_years
+        tests:
+          - accepted_range:
+              min_value: 0
+              max_value: 10
+
+      - name: dti
+        tests:
+          - accepted_range:
+              min_value: 0
+              max_value: 1
