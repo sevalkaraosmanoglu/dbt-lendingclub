@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: lending_club
+    database: lending-club-loan-data-488307
+    schema: lendingclub
+    tables:
+      - name: accepted_raw
+      - name: rejected_raw

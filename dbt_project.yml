@@ -1,8 +1,8 @@
-name: 'bitirme_project'
+name: 'lending_club'
 version: '1.0.0'
 config-version: 2
 
-profile: 'bitirme_project'
+profile: 'lending_club'
 
 model-paths: ["models"]
 analysis-paths: ["analyses"]
@@ -16,6 +16,6 @@ clean-targets:
   - "dbt_packages"
 
 models:
-  bitirme_project:
+  lending_club:
     staging:
       +materialized: table
