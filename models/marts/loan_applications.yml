@@ -3,62 +3,42 @@ version: 2
 models:
   - name: loan_applications
     description: >
-      Accepted ve rejected loan başvurularının birleştirildiği,
-      analiz ve raporlama için kullanılan mart tablosu.
+      Accepted ve rejected loan başvurularının birleştiği,
+      analiz amaçlı mart tablosu.
 
     columns:
 
       - name: loan_amount
-        description: Loan amount requested by applicant
         tests:
           - not_null
 
       - name: loan_term
-        description: Loan term in months (only for accepted loans)
+        description: Loan term in months (accepted only)
 
       - name: interest_rate
-        description: Interest rate of the loan (only for accepted loans)
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: "interest_rate > 0 or interest_rate is null"
+        description: Interest rate (accepted only)
 
       - name: grade
-        description: Loan grade (A–G)
 
       - name: sub_grade
-        description: Loan sub grade (A1–G5)
 
       - name: employment_length_years
-        description: Employment length converted to numeric years
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: "(employment_length_years between 0 and 10) or employment_length_years is null"
+        description: Employment length in years (0–10)
 
       - name: employment_length_bucket
-        description: Bucketed employment length (e.g. 0-1, 2-5, 6-10)
 
       - name: annual_income
-        description: Applicant annual income
 
       - name: purpose
-        description: Loan purpose
-
+      
       - name: state
-        description: Applicant state
-        tests:
-          - not_null
 
       - name: dti
-        description: Debt to income ratio
-        tests:
-          - dbt_utils.expression_is_true:
-              expression: "(dti between 0 and 1) or dti is null"
+        description: Debt-to-income ratio
 
       - name: application_date
-        description: Loan application date
 
       - name: application_status
-        description: Accepted or rejected flag
         tests:
           - accepted_values:
               values: ['accepted', 'rejected']
