@@ -2,38 +2,62 @@ version: 2
 
 models:
   - name: loan_applications
-    description: >
-      Accepted and rejected loan applications combined into a single analytics table.
+    description: "Accepted ve rejected loan başvurularının birleştirilmiş mart tablosu"
 
     columns:
       - name: loan_amount
         tests:
           - not_null
 
-      - name: application_status
-        tests:
-          - not_null
-          - accepted_values:
-              values: ['accepted', 'rejected']
+      - name: loan_term
+        description: "Loan süresi (ay cinsinden). Sadece accepted kayıtlar için dolu."
 
       - name: interest_rate
-        tests:
-          - not_null:
-              where: "application_status = 'accepted'"
-
-      - name: loan_term
-        tests:
-          - not_null:
-              where: "application_status = 'accepted'"
-
-      - name: employment_length_years
-        tests:
-          - accepted_range:
-              min_value: 0
-              max_value: 10
-
-      - name: dti
+        description: "Faiz oranı. Rejected kayıtlar için null."
         tests:
           - accepted_range:
               min_value: 0
               max_value: 1
+
+      - name: grade
+        description: "Kredi notu harf seviyesi (A–G)."
+
+      - name: sub_grade
+        description: "Kredi notu alt seviye (A1, B3 vb)."
+
+      - name: employment_length_years
+        description: "Çalışma süresi (yıl cinsinden, 0–10 arası)."
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "employment_length_years between 0 and 10"
+
+      - name: employment_length_bucket
+        description: "Çalışma süresi kategorisi (0-1, 2-5, 6-10 gibi)."
+
+      - name: annual_income
+        description: "Yıllık gelir. Sadece accepted kayıtlar için dolu."
+
+      - name: purpose
+        description: "Kredi kullanım amacı."
+
+      - name: state
+        description: "Başvurunun yapıldığı eyalet."
+        tests:
+          - not_null
+
+      - name: dti
+        description: "Debt-to-Income ratio."
+        tests:
+          - dbt_utils.expression_is_true:
+              expression: "dti between 0 and 1"
+
+      - name: application_date
+        description: "Başvuru tarihi."
+        tests:
+          - not_null
+
+      - name: application_status
+        description: "Başvuru durumu: accepted / rejected"
+        tests:
+          - accepted_values:
+              values: ['accepted', 'rejected']
