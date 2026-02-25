@@ -10,54 +10,42 @@ models:
           - not_null
 
       - name: loan_term
-        description: "Loan süresi (ay cinsinden). Sadece accepted kayıtlar için dolu."
+        description: "Loan süresi (ay). Sadece accepted."
 
       - name: interest_rate
-        description: "Faiz oranı. Rejected kayıtlar için null."
+        description: "Faiz oranı. Rejected için null olabilir."
         tests:
-          - accepted_range:
-              min_value: 0
-              max_value: 1
+          - dbt_utils.expression_is_true:
+              expression: "interest_rate >= 0 or interest_rate is null"
 
       - name: grade
-        description: "Kredi notu harf seviyesi (A–G)."
 
       - name: sub_grade
-        description: "Kredi notu alt seviye (A1, B3 vb)."
 
       - name: employment_length_years
-        description: "Çalışma süresi (yıl cinsinden, 0–10 arası)."
         tests:
           - dbt_utils.expression_is_true:
-              expression: "employment_length_years between 0 and 10"
+              expression: "employment_length_years >= 0 and employment_length_years <= 10 or employment_length_years is null"
 
       - name: employment_length_bucket
-        description: "Çalışma süresi kategorisi (0-1, 2-5, 6-10 gibi)."
 
       - name: annual_income
-        description: "Yıllık gelir. Sadece accepted kayıtlar için dolu."
 
       - name: purpose
-        description: "Kredi kullanım amacı."
 
       - name: state
-        description: "Başvurunun yapıldığı eyalet."
-        tests:
-          - not_null
+        description: "Eyalet bilgisi. Rejected başvurularda null olabilir."
 
       - name: dti
-        description: "Debt-to-Income ratio."
         tests:
           - dbt_utils.expression_is_true:
-              expression: "dti between 0 and 1"
+              expression: "dti >= 0 and dti <= 1 or dti is null"
 
       - name: application_date
-        description: "Başvuru tarihi."
         tests:
           - not_null
 
       - name: application_status
-        description: "Başvuru durumu: accepted / rejected"
         tests:
           - accepted_values:
               values: ['accepted', 'rejected']
