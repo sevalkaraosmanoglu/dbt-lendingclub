@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: loan_applications
+    description: >
+      Accepted ve rejected loan başvurularının birleştiği,
+      analiz amaçlı mart tablosu.
+
+    columns:
+
+      - name: loan_amount
+        tests:
+          - not_null
+
+      - name: loan_term
+        description: Loan term in months (accepted only)
+
+      - name: interest_rate
+        description: Interest rate (accepted only)
+
+      - name: grade
+
+      - name: sub_grade
+
+      - name: employment_length_years
+        description: Employment length in years (0–10)
+
+      - name: employment_length_bucket
+
+      - name: annual_income
+
+      - name: purpose
+      
+      - name: state
+
+      - name: dti
+        description: Debt-to-income ratio
+
+      - name: application_date
+
+      - name: application_status
+        tests:
+          - accepted_values:
+              values: ['accepted', 'rejected']
