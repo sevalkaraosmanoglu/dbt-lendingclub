@@ -31,6 +31,7 @@ The Power BI dashboard explores:
 * Loan amount distribution
 * Borrower risk patterns
 * Loan status analysis
+* 2 LogisticRegression models
 
 ## Repository Structure
 
